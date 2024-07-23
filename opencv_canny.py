@@ -46,11 +46,8 @@ if len(points) > 0:
     points_array = np.array([points], dtype=np.int32)
     cv2.fillPoly(polygon_mask, points_array, 255)
 
-# Invert the polygon mask to keep only the area outside the polygon
-polygon_mask_inv = cv2.bitwise_not(polygon_mask)
-
-# Mask the original image to keep only the area outside the polygon
-masked_image = cv2.bitwise_and(original_image, original_image, mask=polygon_mask_inv)
+# Mask the original image to keep only the area inside the polygon
+masked_image = cv2.bitwise_and(original_image, original_image, mask=polygon_mask)
 
 # Convert the masked image to grayscale
 gray = cv2.cvtColor(masked_image, cv2.COLOR_BGR2GRAY)
@@ -78,15 +75,16 @@ combined_diagonals = cv2.bitwise_or(diagonal_45, diagonal_135)
 kernel = np.ones((5,5), np.uint8)
 dilated = cv2.dilate(combined_diagonals, kernel, iterations=1)
 
-# Apply the inverted polygon mask to the dilated image to keep only edges outside the polygon
-dilated_masked = cv2.bitwise_and(dilated, polygon_mask_inv)
+# Apply the polygon mask to the dilated image to keep only edges inside the polygon
+dilated_masked = cv2.bitwise_and(dilated, polygon_mask)
 
 # Create a mask from the detected regions
 mask = np.zeros_like(original_image)
 mask[dilated_masked > 0] = [0, 0, 255]  # Red color for detected regions
 
 # Combine the mask with the original image
-highlighted_image = cv2.addWeighted(original_image, 0.7, mask, 0.3, 0)
+highlighted_image = original_image.copy()
+highlighted_image[mask > 0] = mask[mask > 0]
 
 # Draw the polygon in red on the final image with a thicker line
 if points_array is not None:
@@ -95,9 +93,9 @@ if points_array is not None:
 # Display the final result
 plt.figure(figsize=(10, 10))
 plt.imshow(cv2.cvtColor(highlighted_image, cv2.COLOR_BGR2RGB))
-plt.title('Final Image with Traced Edges Outside Polygon')
+plt.title('Final Image with Traced Edges Inside Polygon')
 plt.show()
 
 # Save the output image
-output_image_path = 'detected_diagonal_shading_polygon_outside.png'
+output_image_path = 'detected_diagonal_shading_polygon_inside.png'
 cv2.imwrite(output_image_path, highlighted_image)
