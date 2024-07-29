@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="22ce8bb4-2f98-4460-99e6-e15e49e266b7" name="Changes" comment="Can now plot a polygon of the excluded zones.">
+      <change afterPath="$PROJECT_DIR$/.idea/autoChart.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/detected_diagonal_shading.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/detected_diagonal_shading_excluded.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/detected_diagonal_shading_polygon_outside.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/floor_tracing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shaded_masked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shaded_masked_debug.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shaded_region.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trackbar_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/unshaded_masked.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/unshaded_masked_debug.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/unshaded_region.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/highlight_lines.py" beforeDir="false" afterPath="$PROJECT_DIR$/highlight_lines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opencv_canny.py" beforeDir="false" afterPath="$PROJECT_DIR$/opencv_canny.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;apf99&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/apf99/auto_chart.git&quot;,
+    &quot;accountId&quot;: &quot;7e3b9d5f-e300-41c7-ab44-6a12b59bdd13&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2jIGJeJuqf9xPurSURDOJYcMB4Y" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.floor_tracing.executor&quot;: &quot;Run&quot;,
+    &quot;Python.highlight_lines.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.opencv_canny.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.trackbar_test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/andyf/PycharmProjects/autoChart&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="22ce8bb4-2f98-4460-99e6-e15e49e266b7" name="Changes" comment="" />
+      <created>1721067107070</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721067107070</updated>
+    </task>
+    <task id="LOCAL-00001" summary="First commit.  This code will take a rotated chart image and will rotate the chart into correct alignment and highlight the axes.">
+      <option name="closed" value="true" />
+      <created>1721101699659</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1721101699659</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Traced all lines.  Need to exclude shaded regions.">
+      <option name="closed" value="true" />
+      <created>1721666246802</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1721666246803</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Can now plot a polygon of the excluded zones.">
+      <option name="closed" value="true" />
+      <created>1721755998765</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1721755998765</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="First commit.  This code will take a rotated chart image and will rotate the chart into correct alignment and highlight the axes." />
+    <MESSAGE value="Traced all lines.  Need to exclude shaded regions." />
+    <MESSAGE value="Can now plot a polygon of the excluded zones." />
+    <option name="LAST_COMMIT_MESSAGE" value="Can now plot a polygon of the excluded zones." />
+  </component>
+</project>
