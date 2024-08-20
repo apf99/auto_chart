@@ -1,0 +1,64 @@
+Image Analysis Algorithm for Curve Intersection and Anomaly Detection
+Overall Purpose:
+The system aims to detect, isolate, and analyze curves in images, focusing on chart images with intersecting lines and potential anomalies. It processes the image column by column, identifying pixel groups, detecting intersections, and now includes a second pass for anomaly detection.
+Image Preprocessing:
+Converts input image to grayscale
+Applies Gaussian blur
+Uses thresholding to create a binary image
+Identifies contours and filters them based on length, area, and proximity to edges
+Creates a clean bitmap with filtered contours on a white background
+Initialization Process:
+Identifies starting and ending points of curves
+Calculates initial curve thickness
+Sets minimum height threshold for valid pixel groups
+Main Analysis Process (First Pass):
+Analyzes the image column by column from left to right
+Identifies pixel groups in each column
+Implements a two-stage filtering process (primary and secondary filters)
+Detects intersections based on group count changes and height criteria
+Updates running averages of curve heights using Exponential Moving Average (EMA)
+Intersection Detection:
+Start of intersection criteria:
+Number of groups decreases
+At least one group becomes significantly taller (1.8 times average height)
+End of intersection criteria:
+Number of groups increases back to more than one
+Maximum group height falls below 1.5 times the initial thickness
+Marks intersections with vertical lines (black for start, magenta for end)
+Running Height Calculation (EMA):
+The running average heights are now calculated using an Exponential Moving Average (EMA) with the following weights:
+90% weight for the current column's value
+10% weight for the previous running average
+This change makes the average more responsive to recent changes in line thickness.
+Switching Heights After Intersection:
+After detecting the end of an intersection, the order of avg_heights is switched to account for the crossing of lines. This is implemented in both the first and second loops.
+Anomaly Detection (Second Pass):
+A second loop is implemented for anomaly detection, which runs after the first pass of intersection detection. This loop uses the information gathered from the first pass, including intersection points and updated running averages.
+Key features of the anomaly detection process:
+Skips updating running averages in intersection regions
+Detects anomalies based on sudden increases in group thickness
+Marks the start and end of anomalies with colored lines
+Anomaly detection criteria:
+Start of anomaly: Current height > 1.8 running average height
+End of anomaly: Current height returns to within 20% of pre-anomaly average
+Visualization and Output:
+Draws colored circles for starting and ending points of curves
+Marks intersections with vertical lines (black for start, magenta for end)
+Marks anomalies with vertical lines (blue for start, green for end)
+Saves and displays the final image with all markings
+Key Principles and Rules:
+Group count should never exceed the number of starting points
+Real-time cleaning of bogus groups is essential
+Careful tracking of group continuity and legitimacy throughout the process
+Adaptive thresholding based on initial curve characteristics
+Minimum size threshold for valid pixel groups to filter out noise
+Current Challenges and Areas for Improvement:
+Refining the algorithm to better distinguish between actual intersections and artifacts
+Improving the handling of bogus groups that merge with legitimate groups
+Enhancing robustness against various types of chart artifacts and imperfections
+Fine-tuning anomaly detection parameters for better accuracy
+Implementation Details:
+Uses OpenCV library for image processing tasks
+Implements custom functions for pixel group identification and legitimacy checking
+Utilizes dynamic thresholding to adapt to different chart styles and qualities
+This summary encapsulates the current state of the project, including recent changes to the EMA calculation, the implementation of height switching after intersections, and the addition of the second pass for anomaly detection. It provides a comprehensive overview for continued development and problem-solving, focusing on the integration of these new features while maintaining the core functionality of intersection detection.

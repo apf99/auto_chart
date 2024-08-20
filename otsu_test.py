@@ -1,0 +1,288 @@
+import cv2
+import numpy as np
+import os
+import sys
+
+# Get the current script's directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the full path to the image
+image_path = os.path.join(script_dir, 'Chart_Image_1.jpg')
+
+# Read the image
+img = cv2.imread(image_path)
+if img is None:
+    print(f"Error: Unable to load image from {image_path}")
+    exit(1)
+
+# Get and print image dimensions
+height, width = img.shape[:2]
+print(f"Image dimensions: {width} x {height}")
+
+# Convert to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply Gaussian Blur
+blur_size = 3
+blurred = cv2.GaussianBlur(gray, (blur_size, blur_size), 0)
+
+# Apply thresholding
+thresh_value = 40
+_, binary = cv2.threshold(blurred, thresh_value, 255, cv2.THRESH_BINARY)
+
+# Set the specified parameters
+min_length = 282
+min_area = 570
+line_thickness = 7
+
+# Find contours
+contours, _ = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+
+# Filter contours based on length, area, and proximity to edges
+filtered_contours = []
+edge_margin = 10  # Margin from the edge to consider as border
+
+for cnt in contours:
+    length = cv2.arcLength(cnt, True)
+    area = cv2.contourArea(cnt)
+    x, y, w, h = cv2.boundingRect(cnt)
+    
+    if (length > min_length and
+        area > min_area and
+        x > edge_margin and y > edge_margin and
+        x + w < width - edge_margin and
+        y + h < height - edge_margin):
+        filtered_contours.append(cnt)
+
+# Create a white background image
+contour_img = np.ones_like(img) * 255
+
+# Draw filtered contours with the specified thickness
+cv2.drawContours(contour_img, filtered_contours, -1, (0, 0, 255), line_thickness)
+
+# Store a copy of the contour image before adding circles
+contour_img_copy = contour_img.copy()
+
+def is_red_pixel(b, g, r):
+    return r > 200 and g < 50 and b < 50
+
+# Find starting points (from left to right)
+start_points = []
+scan_width = int(width * 0.2)  # Scan the first 20% of the image width
+
+for x in range(scan_width):
+    y = 0
+    while y < height:
+        if is_red_pixel(*map(int, contour_img[y, x])):
+            top = bottom = y
+            while bottom < height - 1 and is_red_pixel(*map(int, contour_img[bottom + 1, x])):
+                bottom += 1
+            
+            connected = False
+            if x > 0:
+                for check_y in range(max(0, top - 2), min(height, bottom + 3)):
+                    if is_red_pixel(*map(int, contour_img[check_y, x - 1])):
+                        connected = True
+                        break
+                
+                if not connected:
+                    middle_y = (top + bottom) // 2
+                    if is_red_pixel(*map(int, contour_img[middle_y, x - 1])):
+                        connected = True
+            
+            if not connected:
+                center_y = (top + bottom) // 2
+                start_points.append((x, center_y))
+            
+            y = bottom + 1
+        else:
+            y += 1
+
+# Find ending points (from right to left)
+end_points = []
+scan_width = int(width * 0.1)  # Scan the last 10% of the image width
+
+for x in range(width - 1, width - scan_width - 1, -1):
+    y = 0
+    while y < height:
+        if is_red_pixel(*map(int, contour_img[y, x])):
+            top = bottom = y
+            while bottom < height - 1 and is_red_pixel(*map(int, contour_img[bottom + 1, x])):
+                bottom += 1
+            
+            connected = False
+            if x < width - 1:
+                for check_y in range(max(0, top - 2), min(height, bottom + 3)):
+                    if is_red_pixel(*map(int, contour_img[check_y, x + 1])):
+                        connected = True
+                        break
+                
+                if not connected:
+                    middle_y = (top + bottom) // 2
+                    if is_red_pixel(*map(int, contour_img[middle_y, x + 1])):
+                        connected = True
+            
+            if not connected:
+                center_y = (top + bottom) // 2
+                end_points.append((x, center_y))
+            
+            y = bottom + 1
+        else:
+            y += 1
+
+# Draw circles at the starting points (orange)
+for point in start_points:
+    cv2.circle(contour_img, point, 10, (0, 165, 255), -1)
+
+# Draw circles at the ending points (cyan)
+for point in end_points:
+    cv2.circle(contour_img, point, 10, (255, 255, 0), -1)
+
+# Convert the contour image copy to a binary bitmap
+_, bitmap = cv2.threshold(cv2.cvtColor(contour_img_copy, cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
+
+def save_debug_image(bitmap, filename):
+    # Convert boolean or 0-1 float to 0-255 uint8
+    if bitmap.dtype == bool or (bitmap.dtype in [np.float32, np.float64] and bitmap.max() <= 1):
+        image_to_save = (1 - bitmap.astype(np.uint8)) * 255
+    else:
+        image_to_save = bitmap.astype(np.uint8)
+    
+    cv2.imwrite(filename, image_to_save)
+
+# Save the initial bitmap for debugging
+save_debug_image(bitmap, 'debug_initial_bitmap.jpg')
+
+def identify_pixel_groups(bitmap, column, min_height, is_start_point_column):
+    if is_start_point_column:
+        return 0, []  # Return empty list for start point columns
+    
+    height = bitmap.shape[0]
+    groups = []
+    in_group = False
+    start_y = 0
+    
+    for y in range(height - 1, -1, -1):  # Start from bottom, move up
+        if bitmap[y, column] == 0 and not in_group:  # Black pixel, start of group
+            in_group = True
+            start_y = y
+        elif (bitmap[y, column] == 255 or y == 0) and in_group:  # White pixel or top of image, end of group
+            end_y = y if bitmap[y, column] == 255 else y + 1
+            group_height = start_y - end_y + 1
+            if group_height >= min_height:
+                groups.append((start_y, end_y, group_height))
+            else:
+                # Paint the pixels white for groups that are too small
+                for py in range(end_y, start_y + 1):
+                    bitmap[py, column] = 255
+            in_group = False
+    
+    return len(groups), groups
+
+def initialize_curve_thicknesses(bitmap, start_points, end_points):
+    right_start = max(point[0] for point in start_points)
+    left_end = min(point[0] for point in end_points)
+    
+    sample_range = left_end - right_start
+    num_samples = 10
+    sample_step = max(1, sample_range // num_samples)
+    
+    expected_groups = len(start_points)
+    valid_thicknesses = []
+    
+    start_point_columns = set(point[0] for point in start_points)
+    
+    for x in range(right_start, left_end, sample_step):
+        is_start_point_column = x in start_point_columns
+        group_count, groups = identify_pixel_groups(bitmap, x, 1, is_start_point_column)  # Use 1 as min_height initially
+        
+        if group_count == expected_groups:
+            avg_thickness = sum(group[2] for group in groups) / group_count
+            valid_thicknesses.append(avg_thickness)
+    
+    if valid_thicknesses:
+        return sum(valid_thicknesses) / len(valid_thicknesses)
+    else:
+        return None  # Or some default value
+
+# Initialize curve thicknesses
+initial_thickness = initialize_curve_thicknesses(bitmap, start_points, end_points)
+if initial_thickness is None:
+    print("Failed to initialize curve thicknesses")
+    exit(1)
+
+print(f"Initial average curve thickness: {initial_thickness:.2f}")
+
+# Initialize variables for the main analysis
+left_x = min(point[0] for point in start_points)
+right_x = max(point[0] for point in end_points)
+prev_group_count = len(start_points)
+avg_heights = [initial_thickness] * len(start_points)
+intersection_starts = []
+intersection_ends = []
+in_intersection = False
+prev_groups = []
+prev_start_points = start_points  # Initialize with all start points
+
+print(f"Initial start points: {start_points}")
+
+# Create a set of starting point x-coordinates
+start_point_columns = set(point[0] for point in start_points)
+
+# Get the initial number of start points
+initial_start_point_count = len(start_points)
+
+print(f"Initial start points: {start_points}")
+print(f"Initial start point count: {initial_start_point_count}")
+
+# Analyze columns from left to right
+for x in range(left_x, right_x + 1):
+    min_avg = min(avg_heights)
+    min_height = max(1, int(min_avg * 0.2))
+
+    is_start_point_column = x in start_point_columns
+    group_count, groups = identify_pixel_groups(bitmap, x, min_height, is_start_point_column)
+
+    # Check for intersection start
+    if not in_intersection and group_count < prev_group_count and prev_group_count > 0:
+        if groups:
+            max_height = max(group[2] for group in groups)
+            avg_height = sum(avg_heights) / len(avg_heights) if avg_heights else initial_thickness
+            
+            if max_height > 1.8 * avg_height:
+                intersection_starts.append(x)
+                in_intersection = True
+                print(f"Intersection start detected at column {x}")
+                save_debug_image(bitmap, f'debug_artifact_detected_column_{x}.jpg')
+    
+    # Check for intersection end
+    elif in_intersection and group_count > 1:
+        max_height = max(group[2] for group in groups)
+        if max_height < 1.5 * initial_thickness:  # Adjust this threshold as needed
+            intersection_ends.append(x)
+            in_intersection = False
+            print(f"Intersection end detected at column {x}")
+            save_debug_image(bitmap, f'debug_artifact_cleaned_column_{x}.jpg')
+    
+    prev_group_count = group_count
+    prev_groups = groups  # Store current groups for next iteration
+
+# Draw intersection lines on the final image
+for start, end in zip(intersection_starts, intersection_ends):
+    cv2.line(contour_img, (start, 0), (start, height), (0, 0, 0), 2)  # Black line for start
+    cv2.line(contour_img, (end, 0), (end, height), (255, 0, 255), 2)  # Magenta line for end
+
+# Save the final bitmap for debugging
+save_debug_image(bitmap, 'debug_final_bitmap.jpg')
+
+# Save and display the final image
+final_output_path = os.path.join(script_dir, 'final_result_with_intersections.jpg')
+cv2.imwrite(final_output_path, contour_img)
+cv2.imshow('Final Result with Intersections', contour_img)
+
+print(f"Final image saved to: {final_output_path}")
+print(f"Intersection starts: {intersection_starts}")
+print(f"Intersection ends: {intersection_ends}")
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()

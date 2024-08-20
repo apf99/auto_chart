@@ -1,0 +1,86 @@
+Image Analysis Algorithm for Curve Intersection Detection
+Purpose and Scope:
+Analyze chart images to detect intersections between curves.
+Designed to handle charts with any number of curves, not limited to two.
+Capable of processing various types of chart images with different complexities.
+Preprocessing and Image Preparation:
+a) Image Conversion:
+Loads the original image file (e.g., 'Chart_Image_1.jpg').
+Converts the image to grayscale for easier processing.
+b) Noise Reduction:
+Applies Gaussian blur to reduce noise and smooth the image.
+c) Adaptive Thresholding:
+Uses adaptive thresholding to create a binary image.
+This process separates curves from background, gridlines, and axis labels.
+Effectively removes lighter elements like gridlines and text.
+d) Contour Detection and Filtering:
+Finds contours in the binary image.
+Filters contours based on:
+Length: Removes very short contours (noise or artifacts).
+Area: Eliminates contours too small to be part of main curves.
+Proximity to edges: Excludes likely axis labels or border elements.
+e) Clean Bitmap Creation:
+Draws filtered contours on a new white background.
+Results in a clean bitmap containing only relevant curve data.
+3. Initialization Process:
+a) Starting Point Identification:
+Locates and marks the starting points of each curve.
+b) Curve Count Determination:
+Sets the expected number of groups based on starting points.
+c) Initial Thickness Calculation:
+Samples multiple columns from leftmost starting point to rightmost ending point.
+Takes 10 samples across this range.
+Calculates average thickness where group count matches expected count.
+d) Minimum Height Threshold:
+Sets minimum height for valid pixel groups (25% of initial thickness).
+Main Analysis Process (Column-by-Column):
+a) Pixel Group Identification:
+Analyzes each column of the bitmap from left to right.
+Identifies contiguous sets of black pixels (pixel groups).
+Ignores groups smaller than the minimum height threshold.
+b) Group Legitimacy Check:
+Ensures number of groups never exceeds number of starting points.
+Legitimate group criteria:
+Connected to a group in the previous column (top, bottom, or middle pixel), OR
+Connected to a starting point in the previous column (any pixel can be adjacent).
+Groups not meeting these criteria are considered bogus.
+c) Bogus Group Handling:
+"Disregards" bogus groups by changing their pixels to white.
+This cleaning occurs in real-time during analysis.
+Intersection Detection:
+a) Start of Intersection Criteria:
+Number of groups decreases.
+At least one group becomes significantly taller (1.8 times average height).
+b) End of Intersection Criteria:
+Number of groups increases back to more than one.
+Maximum group height falls below 1.5 times the initial thickness.
+c) Marking Intersections:
+Start of intersection marked with a black vertical line.
+End of intersection marked with a magenta vertical line.
+6. Challenges and Considerations:
+a) Artifact Handling:
+Text or other artifacts can create bogus groups.
+Bogus groups may merge with legitimate groups, complicating removal.
+b) False Positives:
+Algorithm may detect false intersections due to artifacts (e.g., 'b' artifact in the example).
+c) Merged Bogus and Legitimate Groups:
+Difficulty in separating bogus elements that have merged with legitimate curves.
+Key Principles and Rules:
+Group count never exceeds starting point count.
+Real-time cleaning of bogus groups is essential.
+Careful tracking of group continuity and legitimacy throughout the process.
+Adaptive thresholding based on initial curve characteristics.
+Minimum size threshold for valid pixel groups to filter out noise.
+Current Limitations and Areas for Improvement:
+Refining the algorithm to better distinguish between actual intersections and artifacts.
+Developing methods to handle bogus groups that merge with legitimate groups.
+Improving robustness against various types of chart artifacts and imperfections.
+9. Implementation Details:
+Uses OpenCV library for image processing tasks.
+Implements custom functions for pixel group identification and legitimacy checking.
+Utilizes dynamic thresholding to adapt to different chart styles and qualities.
+Output and Visualization:
+Produces a final image with intersections marked.
+Draws colored circles to indicate starting and ending points of curves.
+Visualizes the detection process for easy verification and debugging.
+This comprehensive summary encapsulates the entire process, from initial image processing to final intersection detection, including the challenges faced and the strategies employed to overcome them. It provides a detailed overview of the algorithm's functionality, its underlying principles, and the current areas of focus for improvement.

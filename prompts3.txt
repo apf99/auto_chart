@@ -1,0 +1,116 @@
+Image Processing and Curve Detection System: Current State and Future Goals
+
+1. Overall Purpose:
+   The system aims to detect, isolate, and analyze curves in images, particularly focusing on chart images with intersecting lines and potential artifacts.
+
+2. Current Implementation:
+
+   a) Image Preprocessing:
+      - Converts input image to grayscale
+      - Applies Gaussian blur
+      - Uses thresholding to create a binary image
+
+   b) Initial Curve Detection:
+      - Identifies contours in the binary image
+      - Filters contours based on length, area, and proximity to edges
+      - Draws filtered contours on a white background
+
+   c) Pixel Group Analysis:
+      - Scans the image column by column
+      - Identifies groups of connected pixels in each column
+
+   d) Two-Stage Filtering Process:
+      i) Primary Filter:
+         - Purpose: Quick elimination of obvious non-curve elements
+         - Criteria:
+           * Minimum height check
+           * Vertical connectivity to previous column
+           * Adjacency to starting points (for columns with starting points)
+         - Status: Working as intended
+
+      ii) Secondary Filter:
+         - Purpose: Rigorous examination to ensure groups belong to legitimate curve segments
+         - Process:
+           * Group continuity check with previous column
+           * Horizontal connectivity examination
+           * Legitimacy scoring based on overlap and connectivity
+           * Group merging for connected groups
+           * New group validation
+           * Adaptive thresholding based on image and curve characteristics
+         - Status: Partially working, issues at column 2057
+
+   e) Intersection Detection:
+      - Criteria for start of intersection:
+        * Decrease in number of groups
+        * At least one group becomes significantly taller (1.8 times average height)
+      - Criteria for end of intersection:
+        * Number of groups increases back to more than one
+        * Maximum group height falls below 1.5 times the initial thickness
+      - Marking:
+        * Start of intersection marked with a black vertical line
+        * End of intersection marked with a magenta vertical line
+
+   f) Artifact Handling:
+      - The 'b' artifact:
+        * Remnant from curve labeling
+        * Partially reduced by secondary filter
+        * Requires further processing for complete removal
+
+3. Current Challenges:
+
+   a) Secondary Filter Performance:
+      - Issue at column 2057:
+        * Encounters 4 groups
+        * Only reduces to 3 groups instead of expected 2
+        * One bogus group not being eliminated
+
+   b) Debugging and Logging:
+      - Previous attempts to add debugging information broke code functionality
+      - Need for a new approach to logging that doesn't interfere with existing operations
+      - Suggestion: Implement logging within the identify_pixel_groups function rather than the main loop
+
+   c) Artifact Removal:
+      - The 'b' artifact still present after filtering
+      - Secondary filter partially reduces it but doesn't eliminate completely
+
+4. Next Steps and Future Goals:
+
+   a) Immediate Focus:
+      - Fix secondary filter performance, particularly at column 2057
+      - Implement a new logging/debugging approach that doesn't break existing functionality
+
+   b) Short-term Goals:
+      - Develop and implement a curve smoothing algorithm to remove remnants of the 'b' artifact
+      - Refine intersection detection to handle complex cases
+
+   c) Long-term Improvements:
+      - Optimize performance for larger images or real-time processing
+      - Enhance robustness to handle various types of charts and artifacts
+
+5. Key Principles and Rules:
+
+   - Group count should never exceed starting point count
+   - Real-time cleaning of bogus groups is essential
+   - Careful tracking of group continuity and legitimacy throughout the process
+   - Adaptive thresholding and filtering based on image characteristics
+
+6. Debugging and Visualization:
+
+   - Current debugging attempts have been problematic
+   - Need to develop non-intrusive logging methods
+   - Potential approach: Implement logging within key functions (e.g., identify_pixel_groups) rather than in the main loop
+   - Consider creating separate debug versions of critical functions for detailed analysis
+
+7. Performance Considerations:
+
+   - Balance between thorough analysis and processing speed
+   - Potential for optimization in group detection and filtering algorithms
+   - Consider parallel processing for column analysis if performance becomes an issue with larger images
+
+8. Lessons Learned:
+
+   - Importance of isolated testing for new features or debugging code
+   - Need for robust, non-intrusive logging system
+   - Careful consideration of how new code interacts with existing functionality
+
+This summary encapsulates the current state of the project, highlighting both the progress made and the challenges ahead. It provides a comprehensive overview for continued development and problem-solving, with a focus on resolving the secondary filter issues and implementing effective debugging strategies.

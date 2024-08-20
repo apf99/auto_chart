@@ -1,0 +1,62 @@
+Here's the detailed explanation of the anomaly detection process:
+Anomaly Detection in Curve Analysis
+1. Purpose and Overview:
+The anomaly detection process is designed to identify and mark regions in the analyzed curves where significant deviations from the expected curve behavior occur. This is implemented as a separate pass after the initial forward and reverse passes for curve and intersection detection.
+Initialization:
+The process begins by initializing key variables:
+is_anomaly: A boolean flag to track if we're currently in an anomalous region.
+anomaly_start_columns: A list to store the starting columns of detected anomalies.
+anomaly_end_columns: A list to store the ending columns of detected anomalies.
+running_avg_heights: Initialized with the final avg_heights_backward from the reverse pass.
+Iteration Process:
+The algorithm iterates through each column of the image from left to right, starting from the leftmost starting point to the rightmost ending point.
+Group Identification:
+For each column, the identify_pixel_groups function is called to determine the pixel groups present.
+This function returns the group count and details of each group (start y, end y, height).
+Intersection Region Handling:
+The process checks if the current column is within an intersection region.
+If it is, the running averages are not updated in these regions to prevent skewing the data.
+Anomaly Detection Criteria:
+Start of Anomaly:
+The algorithm checks if the height of any group exceeds 1.8 times its corresponding running average height.
+This check is only performed when not already in an anomalous region and when the group is not a starting point.
+End of Anomaly:
+The end is detected when all groups return to within 20% of their pre-anomaly running average heights.
+Running Average Height Calculation:
+The running average heights are updated using an Exponential Moving Average (EMA) approach:
+New average = 0.1 old average + 0.9 current height
+This calculation is only performed when:
+Not in an anomalous region
+Not in an intersection region
+The group is not a starting point group
+Starting Point Handling:
+Groups that correspond to starting points are identified and excluded from running average updates.
+This is crucial as starting point groups are typically very small and could skew the running averages if included.
+Anomaly Region Tracking:
+When an anomaly starts, the column number is added to anomaly_start_columns.
+When an anomaly ends, the column number is added to anomaly_end_columns.
+The is_anomaly flag is used to track whether we're currently within an anomalous region.
+Visualization:
+After processing all columns, blue vertical lines are drawn at the start of each anomalous region.
+Green vertical lines are drawn at the end of each anomalous region.
+These lines are added to the contour_img_updated image.
+11. Output:
+The final image with anomaly markings is saved and displayed.
+Information about detected anomalies (start and end columns) is logged to the console.
+12. Key Considerations:
+The algorithm is designed to handle multiple anomalous regions across the image.
+It's sensitive to sudden increases in group height but requires a return to normal before ending the anomalous region.
+The process is adaptive, using running averages that change based on the recent history of the curve.
+13. Challenges and Nuances:
+Balancing sensitivity: The thresholds (1.8 for start, 20% for end) are crucial for accurate detection.
+Handling intersections: Special care is taken to not update averages in these regions.
+Starting point exclusion: Vital for maintaining accurate running averages.
+Continuous processing: The algorithm doesn't break after finding one anomaly, allowing for multiple detections.
+Potential Improvements:
+Dynamic thresholding based on overall curve characteristics.
+More sophisticated end-of-anomaly detection, possibly considering a window of columns.
+Integration with intersection detection for more context-aware anomaly identification.
+Implementation Details:
+The process is implemented within the main analysis loop, leveraging existing group identification logic.
+It uses numpy for efficient array operations and OpenCV for image manipulation and line drawing.
+This explanation covers the core concepts, implementation details, and considerations for the anomaly detection process in our curve analysis system. It provides a comprehensive overview that can be used as a reference for understanding or further developing this part of the algorithm.
