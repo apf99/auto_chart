@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22ce8bb4-2f98-4460-99e6-e15e49e266b7" name="Changes" comment="Removed the dark background from the image.">
+    <list default="true" id="22ce8bb4-2f98-4460-99e6-e15e49e266b7" name="Changes" comment="several updates.  all working">
+      <changelist_data name="Andrew Friedman" email="andrew@cyberdreaming.net" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flooring.dxf/p1i3gqbpe81mem1oo61ikvkml10pb4_page_01.dxf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flooring.dxf/p1i3gqbpe81mem1oo61ikvkml10pb4_page_02.dxf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/detected_diagonal_shading_polygon_inside.png" beforeDir="false" afterPath="$PROJECT_DIR$/detected_diagonal_shading_polygon_inside.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/highlight_lines.py" beforeDir="false" afterPath="$PROJECT_DIR$/highlight_lines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/opencv_canny.py" beforeDir="false" afterPath="$PROJECT_DIR$/opencv_canny.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,11 +21,16 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Andrew Friedman &lt;andrew@cyberdreaming.net&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {}
-}]]></component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/apf99/auto_chart.git&quot;,
@@ -48,21 +48,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.floor_tracing.executor&quot;: &quot;Run&quot;,
-    &quot;Python.highlight_lines.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.opencv_canny.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.trackbar_test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/andyf/PycharmProjects/autoChart&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.floor_tracing.executor": "Run",
+    "Python.highlight_lines.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.opencv_canny.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.trackbar_test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/andyf/PycharmProjects/autoChart",
+    "settings.editor.selected.configurable": "vcs.Git"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -116,8 +116,27 @@
       <option name="project" value="LOCAL" />
       <updated>1721758055365</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="several updates.  all working">
+      <option name="closed" value="true" />
+      <created>1724155936605</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1724155936605</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -125,6 +144,7 @@
     <MESSAGE value="Traced all lines.  Need to exclude shaded regions." />
     <MESSAGE value="Can now plot a polygon of the excluded zones." />
     <MESSAGE value="Removed the dark background from the image." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed the dark background from the image." />
+    <MESSAGE value="several updates.  all working" />
+    <option name="LAST_COMMIT_MESSAGE" value="several updates.  all working" />
   </component>
 </project>
